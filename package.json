@@ -1,0 +1,23 @@
+{
+  "name": "ConstructorHangman",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rmarro/ConstructorHangman.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rmarro/ConstructorHangman/issues"
+  },
+  "homepage": "https://github.com/rmarro/ConstructorHangman#readme",
+  "dependencies": {
+    "inquirer": "^5.1.0"
+  }
+}
