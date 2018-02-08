@@ -1,4 +1,4 @@
-function Letter(ltr) {
+var Letter = function(ltr) {
     this.ltr = ltr;
     this.guessed = false;
     this.ltrDisplay = function() {
@@ -14,3 +14,5 @@ function Letter(ltr) {
         };
     };
 };
+
+module.exports = Letter;
