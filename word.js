@@ -19,6 +19,7 @@ var Word = function(wrd) {
             var ltrDisplay = this.ltrArray[i].ltrDisplay();
             this.displayWrdArray.push(ltrDisplay);
         };
+        // Should this be changed to return?
         console.log(this.displayWrdArray.join(" "));
     };
 
