@@ -12,7 +12,7 @@ var Word = function(word) {
         };
     };
 
-    // Use function in each letter object to display letter or blank
+    // Use ltrDisplay function in each letter object to display letter or blank
     this.makeDisplayWord = function() {
         this.displayWordArray = [];
         for (i=0; i < this.ltrArray.length; i++) {
@@ -27,7 +27,7 @@ var Word = function(word) {
         for (i=0; i < this.ltrArray.length; i++) {
             this.ltrArray[i].ltrCheck(guess);
         };
-        // If ltrCheck of every letter returns false, log INCORRECT
+        // If ltrCheck of every letter returns false, return false
         if (this.ltrArray.every(function(ltrObj) {
             return ltrObj.ltrCheck(guess) === false;
         })) {

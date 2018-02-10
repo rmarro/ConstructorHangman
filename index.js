@@ -1,7 +1,8 @@
 var inquirer = require("inquirer");
 var Word = require('./word.js');
 
-var wordOptions = ["dog", "bird", "hedgehog"];
+var allowedLetters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+var wordOptions = ["dog", "cat", "bird", "hedgehog", "horse", "fish", "lion", "tiger", "zebra", "elephant", "hippopotamus"];
 var currentWordObj;
 var guessesLeft;
 var alreadyGuessed;
@@ -17,7 +18,7 @@ function startGame() {
             }
         ]
     ).then(function() {
-        var wrd = wordOptions[Math.floor(Math.random()*3)];
+        var wrd = wordOptions[Math.floor(Math.random()*11)];
         currentWordObj = new Word(wrd);
         currentWordObj.makeLtrArray();
         guessesLeft = 8;
@@ -46,8 +47,9 @@ function gameplay() {
 // Displays word, guesses left, and letters already guessed; checks guess input
 function promptPlayer() {
     currentWordObj.makeDisplayWord();
-    console.log(`GUESSES LEFT: ${guessesLeft}`)
-    console.log("ALREADY GUESSED: "+ alreadyGuessed.join(" "))
+    console.log(`GUESSES LEFT: ${guessesLeft}`);
+    console.log("ALREADY GUESSED: "+ alreadyGuessed.join(" "));
+    
     inquirer.prompt(
         [
             {
@@ -58,20 +60,25 @@ function promptPlayer() {
         ]
     ).then(function(data) {
         var guess = data.guess;
-        if (alreadyGuessed.indexOf(guess) != -1) {
-            console.log("\nALREADY GUESSED!\n");
-            promptPlayer();
-        } else {
-            currentWordObj.checkGuess(guess);
-            if (currentWordObj.checkGuess(guess)) {
-                console.log("\nCORRECT\n");
+        if (allowedLetters.indexOf(guess) != -1) {
+            if (alreadyGuessed.indexOf(guess) != -1) {
+                console.log("\nALREADY GUESSED!\n");
+                promptPlayer();
             } else {
-                guessesLeft--;
-                alreadyGuessed.push(guess);
-                console.log("\nINCORRECT\n");
+                currentWordObj.checkGuess(guess);
+                if (currentWordObj.checkGuess(guess)) {
+                    console.log("\nCORRECT\n");
+                } else {
+                    guessesLeft--;
+                    alreadyGuessed.push(guess);
+                    console.log("\nINCORRECT\n");
+                };
+                gameplay();
             };
-            gameplay();
-        };
+        } else {
+            console.log("\nINVALID GUESS!\n");
+            promptPlayer();
+        }
     });
 };
 
@@ -92,7 +99,6 @@ function askPlayAgain() {
         }
     })
 };
-
 
 
 startGame();
