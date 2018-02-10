@@ -19,33 +19,25 @@ var Word = function(word) {
             var ltrDisplay = this.ltrArray[i].ltrDisplay();
             this.displayWordArray.push(ltrDisplay);
         };
-        // Should this be changed to return?
-        console.log(this.displayWordArray.join(" "));
-        console.log("");
+        console.log(this.displayWordArray.join(" ") + "\n");
     };
 
+    // Check the user's guess in each letter object of array
     this.checkGuess = function(guess) {
         for (i=0; i < this.ltrArray.length; i++) {
             this.ltrArray[i].ltrCheck(guess);
         };
     };
+
+    // Check if the word is complete if every letter object has guessed true
+    this.checkComplete = function() {
+        if (this.ltrArray.every(function(ltrObj) {
+            return ltrObj.guessed === true;
+        })) {
+            // console.log("\nYou got it!\n");
+            return true;
+        }
+    }
 };
 
 module.exports = Word;
-
-// TESTING: this all works!!!!!!!
-// Create new word object, call make letter array, call make display word
-// wrd = "hedgehog";
-// var test = new Word(word);
-// test.makeLtrArray();
-// test.makeDisplayWord();
-
-// make a guess, run check guess, run make display word
-// var guess = "h";
-// test.checkGuess(guess);
-// test.makeDisplayWord();
-
-// make a guess, run check guess, run make display word
-// var guess = "e";
-// test.checkGuess(guess);
-// test.makeDisplayWord();

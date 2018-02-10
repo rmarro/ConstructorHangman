@@ -2,7 +2,8 @@ var inquirer = require("inquirer");
 var Word = require('./word.js');
 
 var wordOptions = ["dog", "bird", "hedgehog"];
-var currentWord;
+var currentWordObj;
+var guessesLeft = 10;
 
 // Selects random word, creates array of letter objects, and prompts player
 function startGame() {
@@ -16,31 +17,47 @@ function startGame() {
         ]
     ).then(function() {
         var wrd = wordOptions[Math.floor(Math.random()*3)];
-        currentWord = new Word(wrd);
-        currentWord.makeLtrArray();
-        promptPlayer();
+        currentWordObj = new Word(wrd);
+        currentWordObj.makeLtrArray();
+        gameplay();
     });
 };
 
 // Makes display word, takes user guess and checks guess
-function promptPlayer() {
-    currentWord.makeDisplayWord();
-    inquirer.prompt(
-        [
-            {
-            name: "guess",
-            type: "input",
-            message: "Guess a letter!",
-            }
-        ]
-    ).then(function(data) {
-        var guess = data.guess;
-        currentWord.checkGuess(guess);
+function gameplay() {
+    if (currentWordObj.checkComplete()) {
+        console.log("\nYou got it!\n")
+    } else if (guessesLeft === 0) {
+        console.log("\nOut of guesses!\n")
+    } else {
         promptPlayer();
-    })
+    }
 };
 
+function promptPlayer() {
+    currentWordObj.makeDisplayWord();
+        inquirer.prompt(
+            [
+                {
+                name: "guess",
+                type: "input",
+                message: "Guess a letter!",
+                }
+            ]
+        ).then(function(data) {
+            var guess = data.guess;
+            currentWordObj.checkGuess(guess);
+            gameplay();
+        })
+};
+
+
+
+
 startGame();
+
+
+
 
 
 // TRY THIS LOGIC FOR GAMEPLAY
@@ -53,7 +70,7 @@ startGame();
 // if correct, gameplay
 // if incorrect, guessesLeft-- and gameplay
 
-
+// check if word is done
 
 
 
