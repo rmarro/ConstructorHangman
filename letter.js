@@ -11,7 +11,10 @@ var Letter = function(ltr) {
     this.ltrCheck = function(guess) {
         if (this.ltr === guess) {
             this.guessed = true;
-        };
+            return true;
+        } else {
+            return false;
+        }
     };
 };
 

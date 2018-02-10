@@ -3,7 +3,7 @@ var Word = require('./word.js');
 
 var wordOptions = ["dog", "bird", "hedgehog"];
 var currentWordObj;
-var guessesLeft = 10;
+var guessesLeft = 2;
 
 // Selects random word, creates array of letter objects, and prompts player
 function startGame() {
@@ -23,12 +23,13 @@ function startGame() {
     });
 };
 
-// Makes display word, takes user guess and checks guess
+// Makes display word, takes user guess and checks guess, ends game or prompts player
 function gameplay() {
     if (currentWordObj.checkComplete()) {
-        console.log("\nYou got it!\n")
+        currentWordObj.makeDisplayWord();
+        console.log("You got it!\n")
     } else if (guessesLeft === 0) {
-        console.log("\nOut of guesses!\n")
+        console.log("Out of guesses!\n")
     } else {
         promptPlayer();
     }
@@ -36,22 +37,27 @@ function gameplay() {
 
 function promptPlayer() {
     currentWordObj.makeDisplayWord();
-        inquirer.prompt(
-            [
-                {
-                name: "guess",
-                type: "input",
-                message: "Guess a letter!",
-                }
-            ]
-        ).then(function(data) {
-            var guess = data.guess;
-            currentWordObj.checkGuess(guess);
-            gameplay();
-        })
+    console.log(`Guesses left: ${guessesLeft}`)
+    inquirer.prompt(
+        [
+            {
+            name: "guess",
+            type: "input",
+            message: "Guess a letter!",
+            }
+        ]
+    ).then(function(data) {
+        var guess = data.guess;
+        currentWordObj.checkGuess(guess);
+        if (currentWordObj.checkGuess(guess)) {
+            console.log("\nCORRECT\n");
+        } else {
+            guessesLeft--;
+            console.log("\nINCORRECT\n");
+        };
+        gameplay();
+    })
 };
-
-
 
 
 startGame();

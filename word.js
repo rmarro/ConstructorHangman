@@ -27,6 +27,14 @@ var Word = function(word) {
         for (i=0; i < this.ltrArray.length; i++) {
             this.ltrArray[i].ltrCheck(guess);
         };
+        // If ltrCheck of every letter returns false, log INCORRECT
+        if (this.ltrArray.every(function(ltrObj) {
+            return ltrObj.ltrCheck(guess) === false;
+        })) {
+            return false;
+        } else {
+            return true;
+        }
     };
 
     // Check if the word is complete if every letter object has guessed true
@@ -34,7 +42,6 @@ var Word = function(word) {
         if (this.ltrArray.every(function(ltrObj) {
             return ltrObj.guessed === true;
         })) {
-            // console.log("\nYou got it!\n");
             return true;
         }
     }
