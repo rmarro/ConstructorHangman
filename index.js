@@ -3,80 +3,96 @@ var Word = require('./word.js');
 
 var wordOptions = ["dog", "bird", "hedgehog"];
 var currentWordObj;
-var guessesLeft = 2;
+var guessesLeft;
+var alreadyGuessed;
 
-// Selects random word, creates array of letter objects, and prompts player
+// Selects random word, creates array of letter objects, resets guesses, and prompts player
 function startGame() {
     inquirer.prompt(
         [
             {
                 name: "start",
                 type: "select",
-                message: "WELCOME TO GUESS THE ANIMAL \n  PRESS ENTER TO START GAME"
+                message: "~WELCOME TO GUESS THE ANIMAL~ \n   PRESS ENTER TO START GAME"
             }
         ]
     ).then(function() {
         var wrd = wordOptions[Math.floor(Math.random()*3)];
         currentWordObj = new Word(wrd);
         currentWordObj.makeLtrArray();
+        guessesLeft = 8;
+        alreadyGuessed = [];
         gameplay();
     });
 };
 
-// Makes display word, takes user guess and checks guess, ends game or prompts player
+
+// Check if word is done, check if guesses are left, ends game or prompts player accordingly
 function gameplay() {
     if (currentWordObj.checkComplete()) {
         currentWordObj.makeDisplayWord();
-        console.log("You got it!\n")
+        console.log("YOU GOT IT!\n");
+        askPlayAgain();
     } else if (guessesLeft === 0) {
-        console.log("Out of guesses!\n")
+        currentWordObj.makeDisplayWord();
+        console.log("OUT OF GUESSES!\n");
+        askPlayAgain();
     } else {
         promptPlayer();
     }
 };
 
+
+// Displays word, guesses left, and letters already guessed; checks guess input
 function promptPlayer() {
     currentWordObj.makeDisplayWord();
-    console.log(`Guesses left: ${guessesLeft}`)
+    console.log(`GUESSES LEFT: ${guessesLeft}`)
+    console.log("ALREADY GUESSED: "+ alreadyGuessed.join(" "))
     inquirer.prompt(
         [
             {
             name: "guess",
             type: "input",
-            message: "Guess a letter!",
+            message: "GUESS A LETTER!",
             }
         ]
     ).then(function(data) {
         var guess = data.guess;
-        currentWordObj.checkGuess(guess);
-        if (currentWordObj.checkGuess(guess)) {
-            console.log("\nCORRECT\n");
+        if (alreadyGuessed.indexOf(guess) != -1) {
+            console.log("\nALREADY GUESSED!\n");
+            promptPlayer();
         } else {
-            guessesLeft--;
-            console.log("\nINCORRECT\n");
+            currentWordObj.checkGuess(guess);
+            if (currentWordObj.checkGuess(guess)) {
+                console.log("\nCORRECT\n");
+            } else {
+                guessesLeft--;
+                alreadyGuessed.push(guess);
+                console.log("\nINCORRECT\n");
+            };
+            gameplay();
         };
-        gameplay();
+    });
+};
+
+// Ask if the player wants to play again
+function askPlayAgain() {
+    inquirer.prompt(
+        [
+            {
+                name: "replay",
+                type: "list",
+                choices: ["Yes", "No"],
+                message: "DO YOU WANT TO PLAY AGAIN?"
+            }
+        ]
+    ).then(function(data) {
+        if (data.replay === "Yes") {
+            startGame();
+        }
     })
 };
 
 
+
 startGame();
-
-
-
-
-
-// TRY THIS LOGIC FOR GAMEPLAY
-// gameplay function
-// function to check if word is done
-// if yes, congrats and inquire play again
-// if no, function to check if guesses left
-// if no, out of guesses and prompt play again
-// if yes, prompt player for guess
-// if correct, gameplay
-// if incorrect, guessesLeft-- and gameplay
-
-// check if word is done
-
-
-
